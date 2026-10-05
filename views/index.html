@@ -1,0 +1,3364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakuza Api's - Dokumentasi API</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            background-image: radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 20%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(20, 20, 31, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.03);
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .username {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .logout-btn {
+            background: rgba(231, 76, 60, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 80px 0 120px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23667eea" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #667eea, #764ba2, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin-top: 30px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .search-box:hover {
+            border-color: rgba(102,126,234,0.5);
+            box-shadow: 0 0 30px rgba(102,126,234,0.3);
+        }
+
+        .search-box i {
+            color: #667eea;
+            margin-left: 20px;
+            font-size: 1.2rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            color: white;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .search-box button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+
+        .apikey-info {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin: 30px 0 20px;
+            border: 1px solid rgba(102,126,234,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .apikey-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .apikey-value {
+            background: rgba(0,0,0,0.3);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            color: #fff;
+            border: 1px solid rgba(102,126,234,0.3);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .apikey-stats {
+            display: flex;
+            gap: 25px;
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .apikey-stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -50px auto 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .section-title i {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 12px;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(102,126,234,0.5), transparent);
+        }
+
+        .section-desc {
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            padding-left: 65px;
+        }
+
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .endpoint-card {
+            background: rgba(20, 20, 31, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .endpoint-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #ff6b6b);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .endpoint-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .endpoint-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+            border-color: rgba(102,126,234,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card-header:hover .card-title {
+            color: #667eea;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-title i {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .card-header.active .card-title i {
+            transform: rotate(90deg);
+        }
+
+        .rating {
+            background: rgba(102,126,234,0.15);
+            padding: 6px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #667eea;
+            border: 1px solid rgba(102,126,234,0.3);
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .rating i {
+            color: #39ff14;
+            margin-right: 5px;
+            font-size: 0.75rem;
+        }
+
+        .card-content {
+            display: none;
+            animation: slideDown 0.4s ease;
+        }
+
+        .card-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .description {
+            color: #a0a0a0;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            margin-bottom: 20px;
+            margin-right: 8px;
+        }
+
+        .badge i {
+            font-size: 0.7rem;
+        }
+
+        .endpoint-url {
+            background: #1e1e2a;
+            border-radius: 14px;
+            padding: 18px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.95rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            word-break: break-all;
+            position: relative;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .endpoint-url::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .endpoint-url::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .method {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-right: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .param-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .param-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .param-title i {
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .param-table th {
+            text-align: left;
+            padding: 12px;
+            background: rgba(255,255,255,0.02);
+            color: #a0a0a0;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .param-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            color: #e0e0e0;
+            font-size: 0.95rem;
+        }
+
+        .param-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .param-value {
+            color: #667eea;
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .note {
+            color: #f39c12;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            opacity: 0.8;
+        }
+
+        .code-block {
+            background: #1a1a26;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            border: 1px solid rgba(102,126,234,0.1);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .code-header i {
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .copy-btn:hover {
+            background: #667eea;
+        }
+
+        pre {
+            margin: 0;
+            color: #e0e0e0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            color: #e0e0e0;
+        }
+
+        .test-section {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid rgba(102,126,234,0.15);
+        }
+
+        .test-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-title i {
+            color: #667eea;
+        }
+
+        .test-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .test-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .test-input-group label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .test-input-group label i {
+            color: #667eea;
+            width: 16px;
+        }
+
+        .test-input {
+            background: #14141f;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .test-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+        }
+
+        .test-input[readonly] {
+            background: rgba(20, 20, 31, 0.5);
+            color: #667eea;
+            font-family: monospace;
+            cursor: not-allowed;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 1rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .test-button:hover::before {
+            left: 100%;
+        }
+
+        .test-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102,126,234,0.4);
+        }
+
+        .test-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .test-result {
+            background: #14141f;
+            border-radius: 14px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid rgba(102,126,234,0.15);
+            margin-top: 20px;
+        }
+
+        .test-result pre {
+            margin: 0;
+            color: #e0e0e0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .user-info-card {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(102,126,234,0.2);
+            margin-bottom: 15px;
+        }
+
+        .user-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .user-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-info-label {
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+
+        .user-info-value {
+            color: #667eea;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .user-info-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .badge-warning {
+            background: rgba(241, 196, 15, 0.15);
+            color: #f1c40f;
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+
+        .badge-danger {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .url-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .url-list li {
+            background: #14141f;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.02);
+            word-break: break-all;
+            transition: all 0.3s;
+        }
+
+        .url-list li:hover {
+            border-color: rgba(102,126,234,0.3);
+        }
+
+        .url-list a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .url-list a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 3px solid rgba(102,126,234,0.1);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hit-info {
+            background: rgba(102,126,234,0.05);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .hit-info i {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .hit-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+
+        .footer {
+            background: rgba(20, 20, 31, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 60px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(102,126,234,0.15);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .footer p {
+            color: #a0a0a0;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .footer-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .warning-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            color: #ff6b6b;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .success-message {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            color: #2ecc71;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+                background: none;
+                gap: 10px;
+                padding: 0;
+            }
+
+            .search-box input {
+                width: 100%;
+                background: rgba(255,255,255,0.1);
+            }
+
+            .search-box button {
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .endpoint-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .apikey-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-desc {
+                padding-left: 0;
+            }
+
+            .footer-links {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-crown"></i> Yakuza Api's
+        </div>
+        <div class="nav-links">
+            <a href="/profile">Profile</a>
+            <a href="/dashboard">Dashboard</a>
+            <div class="user-menu">
+                <span class="username" id="navbar-username">Loading...</span>
+                <span class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="header">
+        <div class="header-content">
+            <h1>Dokumentasi API <span>Yakuza Api's</span></h1>
+            <p>Dokumentasi API sederhana dan mudah digunakan untuk bot whatsapp/telegram.</p>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" placeholder="Cari endpoint API..." id="searchInput">
+                    <button onclick="searchEndpoint()"><i class="fas fa-search"></i> Cari</button>
+                </div>
+            </div>
+
+            <div class="apikey-info">
+                <div class="apikey-label">
+                    <i class="fas fa-key"></i>
+                    <span>Your API Key</span>
+                </div>
+                <div class="apikey-value" id="current-apikey">Loading...</div>
+                <div class="apikey-stats" id="apikey-stats">
+                    <span><i class="fas fa-chart-line"></i> Limit: <span id="hit-count">0</span></span>
+                    <span><i class="fas fa-infinity"></i> Sisa: <span id="remaining-count">0</span></span>
+                    <span><i class="fas fa-percent"></i> Pakai: <span id="used-percent">0%</span></span>
+                </div>
+            </div>
+
+            <div id="limit-warning" class="warning-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Peringatan: Sisa limit Anda tinggal <span id="remaining-warning">0</span> lagi! Segera hubungi admin.</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="endpoint-grid">
+            <div class="endpoint-card" data-name="telegram">
+                <div class="card-header" onclick="toggleCard('telegram')" id="header-telegram">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Telegram Stalker
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-telegram">
+                    <p class="description">Menampilkan semua data user</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/telegram?username=@username&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap Uji Coba akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">username</span></td>
+                                    <td>@username <span class="note">(bisa dengan/tanpa @)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/telegram?username=@jokowi&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            API Telegram
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-telegram"></i> Username</label>
+                                <input type="text" class="test-input" id="telegram-username" placeholder="@username" value="@const_true_co">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="telegram-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('telegram')" id="telegram-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="telegram-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="telegram-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-instagram"></i>
+                Instagram Downloader API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Download video, reel, dan postingan Instagram (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="instagram" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('instagram')" id="header-instagram">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Instagram Downloader
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-instagram">
+                    <p class="description">Download video/reel/postingan Instagram dengan mudah. Mendukung format MP4, JPG, dll.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(228, 64, 95, 0.15); color: #e4405f; border-color: #e4405f;">
+                        <i class="fas fa-video"></i> VIDEO/IMAGE
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/instagram?url=INSTAGRAM_URL&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap download akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL Instagram (reel/post/video) <span class="note">*wajib</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/instagram?url=https://www.instagram.com/reel/DOU4ysmD_Q9/&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            Instagram Downloader
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fas fa-link"></i> URL Instagram</label>
+                                <input type="text" class="test-input" id="instagram-url" placeholder="https://www.instagram.com/reel/..." value="https://www.instagram.com/reel/DOU4ysmD_Q9/">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="instagram-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('instagram')" id="instagram-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="instagram-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="instagram-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fas fa-cloud-download-alt"></i>
+                Sfile Downloader API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Download file dari Sfile.co dengan mudah (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="sfile" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('sfile')" id="header-sfile">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Sfile Downloader
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-sfile">
+                    <p class="description">Download berbagai file dari Sfile.co. Mendapatkan link download langsung.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(76, 175, 80, 0.15); color: #4CAF50; border-color: #4CAF50;">
+                        <i class="fas fa-file"></i> FILE DOWNLOAD
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/sfile?url=SFILE_URL&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap download akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL halaman file Sfile.co <span class="note">(contoh: https://sfile.co/FnMRFjF8T8N)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib valid</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/sfile?url=https://sfile.co/FnMRFjF8T8N&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            Sfile Downloader
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fas fa-link"></i> URL Sfile</label>
+                                <input type="text" class="test-input" id="sfile-url" placeholder="https://sfile.co/..." value="https://sfile.co/FnMRFjF8T8N">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="sfile-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('sfile')" id="sfile-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="sfile-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="sfile-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                YouTube MP3 Downloader API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Download audio dari video YouTube dalam format MP3 (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="ytmp3" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('ytmp3')" id="header-ytmp3">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> YouTube MP3 Downloader
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-ytmp3">
+                    <p class="description">Download audio dari video YouTube dalam format MP3.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(255, 0, 0, 0.15); color: #FF0000; border-color: #FF0000;">
+                        <i class="fab fa-youtube"></i> YOUTUBE
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/ytmp3?url=YOUTUBE_URL&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap download akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL YouTube (video/shorts) <span class="note">(contoh: https://www.youtube.com/watch?v=dQw4w9WgXcQ)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/ytmp3?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            YouTube MP3 Downloader
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-youtube" style="color: #FF0000;"></i> URL YouTube</label>
+                                <input type="text" class="test-input" id="ytmp3-url" placeholder="https://www.youtube.com/watch?v=..." value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="ytmp3-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('ytmp3')" id="ytmp3-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="ytmp3-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="ytmp3-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                YouTube MP4 Downloader API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Download video dari YouTube dalam format MP4 (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="ytmp4" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('ytmp4')" id="header-ytmp4">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> YouTube MP4 Downloader
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-ytmp4">
+                    <p class="description">Download video dari YouTube dalam format MP4.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(255, 0, 0, 0.15); color: #FF0000; border-color: #FF0000;">
+                        <i class="fab fa-youtube"></i> YOUTUBE
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/ytmp4?url=YOUTUBE_URL&quality=720&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap download akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL YouTube (video/shorts) <span class="note">(wajib)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">quality</span></td>
+                                    <td>Kualitas video (360/480/720/1080) <span class="note">default: 720</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/ytmp4?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&quality=720&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            YouTube MP4 Downloader
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-youtube" style="color: #FF0000;"></i> URL YouTube</label>
+                                <input type="text" class="test-input" id="ytmp4-url" placeholder="https://www.youtube.com/watch?v=..." value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-sliders-h"></i> Kualitas (360/480/720/1080)</label>
+                                <input type="text" class="test-input" id="ytmp4-quality" placeholder="720" value="720">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="ytmp4-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('ytmp4')" id="ytmp4-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="ytmp4-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="ytmp4-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-spotify" style="color: #1DB954;"></i>
+                Spotify Downloader API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Download lagu dari Spotify dalam format MP3 (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="spotify-download" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('spotify-download')" id="header-spotify-download">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Spotify Downloader
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-spotify-download">
+                    <p class="description">Download lagu dari Spotify dalam format MP3. Mendapatkan judul, artis, album, cover, dan link download.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(29, 185, 84, 0.15); color: #1DB954; border-color: #1DB954;">
+                        <i class="fab fa-spotify"></i> DOWNLOAD
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/spotify-download?url=SPOTIFY_URL&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap download akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL lagu Spotify <span class="note">(contoh: https://open.spotify.com/track/5MIpcd16T59wFeqAChSYwC)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/spotify-download?url=https://open.spotify.com/track/5MIpcd16T59wFeqAChSYwC&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            Spotify Downloader
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-spotify" style="color: #1DB954;"></i> URL Spotify / Track ID</label>
+                                <input type="text" class="test-input" id="spotify-download-url" placeholder="https://open.spotify.com/track/5MIpcd16T59wFeqAChSYwC" value="https://open.spotify.com/track/5MIpcd16T59wFeqAChSYwC">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="spotify-download-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('spotify-download')" id="spotify-download-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="spotify-download-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="spotify-download-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-tiktok" style="color: #ff0050;"></i>
+                TikTok Downloader API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Download video TikTok tanpa watermark (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="tiktok-download" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('tiktok-download')" id="header-tiktok-download">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> TikTok Downloader
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-tiktok-download">
+                    <p class="description">Download video TikTok tanpa watermark. Mendapatkan judul, creator, statistik, dan link download.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(255, 0, 80, 0.15); color: #ff0050; border-color: #ff0050;">
+                        <i class="fab fa-tiktok"></i> DOWNLOAD
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/tiktok-download?url=TIKTOK_URL&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap download akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL video TikTok <span class="note">(contoh: https://www.tiktok.com/@user/video/123456789)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/tiktok-download?url=https://www.tiktok.com/@user/video/123456789&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            TikTok Downloader
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-tiktok" style="color: #ff0050;"></i> URL TikTok</label>
+                                <input type="text" class="test-input" id="tiktok-download-url" placeholder="https://www.tiktok.com/@user/video/123456789" value="https://www.tiktok.com/@user/video/123456789">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="tiktok-download-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('tiktok-download')" id="tiktok-download-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="tiktok-download-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="tiktok-download-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                YouTube Search API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Mencari video YouTube berdasarkan kata kunci (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="yts" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('yts')" id="header-yts">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> YouTube Search
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-yts">
+                    <p class="description">Mencari video YouTube berdasarkan kata kunci. Mendapatkan judul, channel, durasi, views, dan thumbnail.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(255, 0, 0, 0.15); color: #FF0000; border-color: #FF0000;">
+                        <i class="fab fa-youtube"></i> SEARCH
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/yts?query=KATA_KUNCI&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap pencarian akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">query</span></td>
+                                    <td>Kata kunci pencarian <span class="note">(contoh: bintang 14 hari)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/yts?query=&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            YouTube Search
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-youtube" style="color: #FF0000;"></i> Kata Kunci</label>
+                                <input type="text" class="test-input" id="yts-query" placeholder="bintang 14 hari" value="bintang 14 hari">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="yts-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('yts')" id="yts-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="yts-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="yts-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-spotify" style="color: #1DB954;"></i>
+                Spotify Search API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Mencari lagu di Spotify berdasarkan kata kunci (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="spotify-search" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('spotify-search')" id="header-spotify-search">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Spotify Search
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-spotify-search">
+                    <p class="description">Mencari lagu di Spotify berdasarkan kata kunci. Mendapatkan judul, artis, album, durasi, dan preview.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(29, 185, 84, 0.15); color: #1DB954; border-color: #1DB954;">
+                        <i class="fab fa-spotify"></i> SEARCH
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/spotify-search?query=KATA_KUNCI&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap pencarian akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">query</span></td>
+                                    <td>Kata kunci pencarian <span class="note">(wajib)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/spotify-search?query=&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            Spotify Search
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-spotify" style="color: #1DB954;"></i> Kata Kunci</label>
+                                <input type="text" class="test-input" id="spotify-search-query" placeholder="bintang 14 hari" value="bintang 14 hari">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="spotify-search-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('spotify-search')" id="spotify-search-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="spotify-search-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="spotify-search-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-tiktok" style="color: #ff0050;"></i>
+                TikTok Search API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Mencari video TikTok berdasarkan kata kunci (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="tiktok-search" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('tiktok-search')" id="header-tiktok-search">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> TikTok Search
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-tiktok-search">
+                    <p class="description">Mencari video TikTok berdasarkan kata kunci. Mendapatkan judul, creator, statistik, dan URL video.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(255, 0, 80, 0.15); color: #ff0050; border-color: #ff0050;">
+                        <i class="fab fa-tiktok"></i> SEARCH
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/tiktok-search?query=KATA_KUNCI&apikey=
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap pencarian akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">query</span></td>
+                                    <td>Kata kunci pencarian <span class="note">(wajib)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/tiktok-search?query=cat&apikey=YOUR_API_KEY')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            TikTok Search
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fab fa-tiktok" style="color: #ff0050;"></i> Kata Kunci</label>
+                                <input type="text" class="test-input" id="tiktok-search-query" placeholder="Lirik Lagu Bintang 14 Hari" value="Lirik Lagu Bintang 14 Hari">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="tiktok-search-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="testAPI('tiktok-search')" id="tiktok-search-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="tiktok-search-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="tiktok-search-result">
+                            <pre><code>// Klik tombol Uji Coba untuk mencoba API</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fab fa-js" style="color: #f7df1e;"></i>
+                JavaScript Obfuscator API
+            </h2>
+            <p class="section-desc" style="width: 100%;">Enkripsi file JavaScript menjadi tidak terbaca (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="js-obfuscate" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('js-obfuscate')" id="header-js-obfuscate">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> JavaScript Obfuscator
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-js-obfuscate">
+                    <p class="description">Enkripsi file JavaScript (.js) menjadi kode yang sulit dibaca. Menggunakan konfigurasi strong obfuscation.</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(247, 223, 30, 0.15); color: #f7df1e; border-color: #f7df1e;">
+                        <i class="fab fa-js"></i> JAVASCRIPT
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">POST</span>
+                        /api/js-obfuscate (multipart/form-data)
+                    </div>
+                    <div class="endpoint-url" style="margin-top: 10px;">
+                        <span class="method">POST</span>
+                        /api/js-obfuscate-text (application/json)
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap obfuscation akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter (File Upload)
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">file</span></td>
+                                    <td>File JavaScript (.js) <span class="note">*wajib, max 5MB</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda (via query) <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter (Text)
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">code</span></td>
+                                    <td>Kode JavaScript <span class="note">*wajib</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda (via query) <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request (File Upload)</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+
+fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/js-obfuscate?apikey=YOUR_API_KEY', {
+    method: 'POST',
+    body: formData
+})
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request (Text)</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/js-obfuscate-text?apikey=YOUR_API_KEY', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code: 'console.log("Hello World");' })
+})
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            JavaScript Obfuscator (Upload File)
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fas fa-file"></i> File JavaScript (.js)</label>
+                                <input type="file" class="test-input" id="js-file">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="js-obfuscate-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="obfuscateFile()" id="js-obfuscate-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="js-obfuscate-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="js-obfuscate-result">
+                            <pre><code>// Pilih file .js dan klik tombol Uji Coba</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="test-section" style="margin-top: 30px;">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            JavaScript Obfuscator (Teks)
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fas fa-code"></i> Kode JavaScript</label>
+                                <textarea class="test-input" id="js-code" rows="5" placeholder="console.log('Hello World');">console.log('Hello World');</textarea>
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="js-obfuscate-text-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="obfuscateText()" id="js-obfuscate-text-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="js-obfuscate-text-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="js-obfuscate-text-result">
+                            <pre><code>// Masukkan kode JavaScript dan klik tombol Uji Coba</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 50px; width: 100%;">
+                <i class="fas fa-cloud-upload-alt" style="color: #3498db;"></i>
+                Upload Media To Url
+            </h2>
+            <p class="section-desc" style="width: 100%;">Upload file ke berbagai hosting (Catbox, Supa, TmpFiles, Uguu, FreeImage) (Memerlukan API Key - Limit berkurang)</p>
+
+            <div class="endpoint-card" data-name="upload" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('upload')" id="header-upload">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Upload Media To Url
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> Ready
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-upload">
+                    <p class="description">Upload file (gambar, video, dokumen) ke berbagai hosting sekaligus. Mendapatkan link dari Catbox, Supa, TmpFiles, Uguu, dan FreeImage (khusus gambar).</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> JSON READY
+                    </div>
+                    <div class="badge" style="background: rgba(52, 152, 219, 0.15); color: #3498db; border-color: #3498db;">
+                        <i class="fas fa-cloud-upload-alt"></i> UPLOAD
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">POST</span>
+                        /api/upload (multipart/form-data)
+                    </div>
+                    <div class="endpoint-url" style="margin-top: 10px;">
+                        <span class="method">POST</span>
+                        /api/upload-url (application/json)
+                    </div>
+
+                    <div class="hit-info">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Perhatikan:</strong> Setiap upload akan mengurangi <span class="hit-badge">LIMIT -1</span> dari limit Anda</span>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter (File Upload)
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">file</span></td>
+                                    <td>File yang akan diupload <span class="note">*wajib, max 50MB</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda (via query) <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="param-section">
+                        <div class="param-title">
+                            <i class="fas fa-list"></i> Parameter (Upload dari URL)
+                        </div>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-value">url</span></td>
+                                    <td>URL file yang akan diupload <span class="note">*wajib</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-value">apikey</span></td>
+                                    <td>API Key Anda (via query) <span class="note">*wajib</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request (File Upload)</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+
+fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/upload?apikey=YOUR_API_KEY', {
+    method: 'POST',
+    body: formData
+})
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request (Upload dari URL)</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/upload-url?apikey=YOUR_API_KEY', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: 'https://example.com/image.jpg' })
+})
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            Upload File
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fas fa-file"></i> Pilih File</label>
+                                <input type="file" class="test-input" id="upload-file">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="upload-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="uploadFile()" id="upload-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="upload-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="upload-result">
+                            <pre><code>// Pilih file dan klik tombol Uji Coba</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="test-section" style="margin-top: 30px;">
+                        <div class="test-title">
+                            <i class="fas fa-flask"></i>
+                            Upload dari URL
+                        </div>
+                        
+                        <div class="test-inputs">
+                            <div class="test-input-group">
+                                <label><i class="fas fa-link"></i> URL File</label>
+                                <input type="text" class="test-input" id="upload-url" placeholder="https://example.com/image.jpg" value="https://via.placeholder.com/300x200.png">
+                            </div>
+                            <div class="test-input-group">
+                                <label><i class="fas fa-key"></i> API Key</label>
+                                <input type="text" class="test-input" id="upload-url-apikey" placeholder="API Key" readonly>
+                            </div>
+                        </div>
+
+                        <button class="test-button" onclick="uploadFromUrl()" id="upload-url-btn">
+                            <i class="fas fa-play"></i>
+                            Uji Coba
+                        </button>
+
+                        <div class="loading" id="upload-url-loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+
+                        <div class="test-result" id="upload-url-result">
+                            <pre><code>// Masukkan URL file dan klik tombol Uji Coba</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="endpoint-card" data-name="telegram-status" style="grid-column: 1/-1;">
+                <div class="card-header" onclick="toggleCard('telegram-status')" id="header-telegram-status">
+                    <h3 class="card-title">
+                        <i class="fas fa-chevron-right"></i> Telegram Status
+                    </h3>
+                    <div class="rating">
+                        <i class="fas fa-check-circle"></i> FREE
+                    </div>
+                </div>
+                
+                <div class="card-content" id="content-telegram-status">
+                    <p class="description">Cek status koneksi Telegram client</p>
+                    
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i> FREE
+                    </div>
+
+                    <div class="endpoint-url">
+                        <span class="method">GET</span>
+                        /api/telegram/status
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Contoh Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <pre><code>fetch('http://pterodactyl.astavvip-tech.xyz:9389/api/telegram/status')
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                    </div>
+
+                    <div class="test-section">
+                        <div class="test-title">
+                            <i class="fas fa-heartbeat"></i>
+                            Cek Status Server
+                        </div>
+
+                        <button class="test-button" onclick="testTelegramStatus()" id="status-btn">
+                            <i class="fas fa-sync"></i>
+                            Cek Status
+                        </button>
+
+                        <div class="loading" id="status-loading">
+                            <div class="spinner"></div>
+                            <p>Mengecek status...</p>
+                        </div>
+
+                        <div class="test-result" id="status-result">
+                            <pre><code>// Status server Telegram</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-info-card" style="margin-top: 50px;">
+            <h3 style="color: white; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-info-circle" style="color: #667eea;"></i> 
+                Informasi Penting
+            </h3>
+            <ul style="color: #a0a0a0; line-height: 2; list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;"><i class="fas fa-key" style="color: #667eea; width: 25px;"></i> <strong>Endpoints</strong> - Memerlukan API Key (didapatkan setelah login)</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-chart-line" style="color: #667eea; width: 25px;"></i> <strong>Limit per User</strong> - 100 request per hari (free), upgrade untuk limit lebih besar</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-clock" style="color: #667eea; width: 25px;"></i> <strong>Limit berkurang</strong> - Setiap test akan mengurangi sisa limit Anda <span class="hit-badge">LIMIT -1</span></li>
+                <li style="margin-bottom: 10px;"><i class="fab fa-telegram" style="color: #667eea; width: 25px;"></i> <strong>Telegram Status</strong> - FREE tanpa limit, untuk cek koneksi server</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-link" style="color: #667eea; width: 25px;"></i> <strong>URL Foto</strong> - Foto profil ditampilkan dalam format data:image/base64 URL</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 - Yakuza Api's</p>
+            <div class="footer-links">
+                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" title="Telegram"><i class="fab fa-telegram"></i></a>
+                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+                <a href="#" title="Donasi"><i class="fas fa-donate"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let userData = null;
+
+        window.onload = function() {
+            loadUserData();
+        };
+
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user/me', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status) {
+                    userData = data.data;
+                    updateUI();
+                    updateAllApikeyInputs(userData.apikey);
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/login';
+            }
+        }
+        
+        async function obfuscateFile() {
+            if (!userData) {
+                alert('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            if (userData.remaining <= 0) {
+                alert('Maaf, limit API Anda sudah habis! Silakan hubungi admin untuk upgrade.');
+                return;
+            }
+
+            const fileInput = document.getElementById('js-file');
+            const btn = document.getElementById('js-obfuscate-btn');
+            const loading = document.getElementById('js-obfuscate-loading');
+            const result = document.getElementById('js-obfuscate-result');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Pilih file JavaScript terlebih dahulu!');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            
+            if (!file.name.toLowerCase().endsWith('.js')) {
+                alert('File harus berekstensi .js!');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Ukuran file maksimal 50MB!');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            result.innerHTML = '<pre><code>// Mengupload file dan memproses obfuscation...</code></pre>';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`/api/js-obfuscate?apikey=${userData.apikey}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.status) {
+                    const completeData = {
+                        status: true,
+                        code: 200,
+                        author: "Yakuza Api's",
+                        message: "Success",
+                        data: {
+                            filename: data.data.original_file,
+                            output_file: data.data.output_file,
+                            size: data.data.size.original,
+                            size_obfuscated: data.data.size.obfuscated
+                        }
+                    };
+                    
+                    result.innerHTML = `<pre><code>${JSON.stringify(completeData, null, 2)}</code></pre>`;
+                } else {
+                    result.innerHTML = `<pre><code>${JSON.stringify(data, null, 2)}</code></pre>`;
+                }
+                
+                await refreshUserData();
+                
+            } catch (error) {
+                const errorData = {
+                    status: false,
+                    code: 500,
+                    author: "Yakuza Api's",
+                    error: true,
+                    message: error.message,
+                    timestamp: new Date().toISOString()
+                };
+                result.innerHTML = `<pre><code>${JSON.stringify(errorData, null, 2)}</code></pre>`;
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        async function obfuscateText() {
+            if (!userData) {
+                alert('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            if (userData.remaining <= 0) {
+                alert('Maaf, limit API Anda sudah habis! Silakan hubungi admin untuk upgrade.');
+                return;
+            }
+
+            const codeInput = document.getElementById('js-code');
+            const btn = document.getElementById('js-obfuscate-text-btn');
+            const loading = document.getElementById('js-obfuscate-text-loading');
+            const result = document.getElementById('js-obfuscate-text-result');
+
+            const code = codeInput.value.trim();
+            
+            if (!code) {
+                alert('Masukkan kode JavaScript!');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            result.innerHTML = '<pre><code>// Memproses obfuscation...</code></pre>';
+
+            try {
+                const response = await fetch(`/api/js-obfuscate-text?apikey=${userData.apikey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+                
+                if (data.status) {
+                    const completeData = {
+                        status: true,
+                        code: 200,
+                        author: "Yakuza Api's",
+                        message: "Success",
+                        data: {
+                            size: data.data.original_size,
+                            size_obfuscated: data.data.obfuscated_size
+                        }
+                    };
+                    
+                    result.innerHTML = `<pre><code>${JSON.stringify(completeData, null, 2)}</code></pre>`;
+                } else {
+                    result.innerHTML = `<pre><code>${JSON.stringify(data, null, 2)}</code></pre>`;
+                }
+                
+                await refreshUserData();
+                
+            } catch (error) {
+                const errorData = {
+                    status: false,
+                    code: 500,
+                    author: "Yakuza Api's",
+                    error: true,
+                    message: error.message
+                };
+                result.innerHTML = `<pre><code>${JSON.stringify(errorData, null, 2)}</code></pre>`;
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        async function uploadFile() {
+            if (!userData) {
+                alert('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            if (userData.remaining <= 0) {
+                alert('Maaf, limit API Anda sudah habis! Silakan hubungi admin untuk upgrade.');
+                return;
+            }
+
+            const fileInput = document.getElementById('upload-file');
+            const btn = document.getElementById('upload-btn');
+            const loading = document.getElementById('upload-loading');
+            const result = document.getElementById('upload-result');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Pilih file terlebih dahulu!');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Ukuran file maksimal 50MB!');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            result.innerHTML = '<pre><code>// Mengupload file...</code></pre>';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`/api/upload?apikey=${userData.apikey}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.status) {
+                    const completeData = {
+                        status: true,
+                        code: 200,
+                        author: "Yakuza Api's",
+                        filename: data.data.filename,
+                        data: {
+                            file_info: {
+                                name: data.data.filename,
+                                size: data.data.size,
+                                size_bytes: data.data.size_bytes,
+                                mime_type: data.data.mime_type,
+                                is_image: data.data.is_image
+                            },
+                            url: data.data.urls
+                        }
+                    };
+                    
+                    result.innerHTML = `<pre><code>${JSON.stringify(completeData, null, 2)}</code></pre>`;
+                } else {
+                    result.innerHTML = `<pre><code>${JSON.stringify(data, null, 2)}</code></pre>`;
+                }
+                
+                await refreshUserData();
+                
+            } catch (error) {
+                const errorData = {
+                    status: false,
+                    code: 500,
+                    author: "Yakuza Api's",
+                    error: true,
+                    message: error.message,
+                    timestamp: new Date().toISOString()
+                };
+                result.innerHTML = `<pre><code>${JSON.stringify(errorData, null, 2)}</code></pre>`;
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        async function uploadFromUrl() {
+            if (!userData) {
+                alert('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            if (userData.remaining <= 0) {
+                alert('Maaf, limit API Anda sudah habis! Silakan hubungi admin untuk upgrade.');
+                return;
+            }
+
+            const urlInput = document.getElementById('upload-url');
+            const btn = document.getElementById('upload-url-btn');
+            const loading = document.getElementById('upload-url-loading');
+            const result = document.getElementById('upload-url-result');
+
+            const fileUrl = urlInput.value.trim();
+            
+            if (!fileUrl) {
+                alert('Masukkan URL file!');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            result.innerHTML = '<pre><code>// Mendownload dan mengupload file...</code></pre>';
+
+            try {
+                const response = await fetch(`/api/upload-url?apikey=${userData.apikey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: fileUrl })
+                });
+
+                const data = await response.json();
+
+                if (data.status) {
+                    const completeData = {
+                        status: true,
+                        code: 200,
+                        author: "Yakuza Api's",
+                        source_url: data.data.source_url,
+                        data: {
+                            file_info: {
+                                size: data.data.size,
+                                size_bytes: data.data.size_bytes,
+                                mime_type: data.data.mime_type,
+                                is_image: data.data.is_image
+                            },
+                            urls: data.data.urls
+                        }
+                    };
+                    
+                    result.innerHTML = `<pre><code>${JSON.stringify(completeData, null, 2)}</code></pre>`;
+                } else {
+                    result.innerHTML = `<pre><code>${JSON.stringify(data, null, 2)}</code></pre>`;
+                }
+                
+                await refreshUserData();
+                
+            } catch (error) {
+                const errorData = {
+                    status: false,
+                    code: 500,
+                    author: "Yakuza Api's",
+                    error: true,
+                    message: error.message,
+                    timestamp: new Date().toISOString()
+                };
+                result.innerHTML = `<pre><code>${JSON.stringify(errorData, null, 2)}</code></pre>`;
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('navbar-username').textContent = userData.username;
+            document.getElementById('current-apikey').textContent = userData.apikey;
+            document.getElementById('hit-count').textContent = userData.hit;
+            document.getElementById('remaining-count').textContent = userData.remaining;
+            
+            const usedPercent = ((userData.hit / userData.limit) * 100).toFixed(1);
+            document.getElementById('used-percent').textContent = usedPercent + '%';
+            
+            if (userData.remaining < 20) {
+                document.getElementById('limit-warning').style.display = 'flex';
+                document.getElementById('remaining-warning').textContent = userData.remaining;
+            } else {
+                document.getElementById('limit-warning').style.display = 'none';
+            }
+        }
+
+        function updateAllApikeyInputs(apikey) {
+            const telegramApikey = document.getElementById('telegram-apikey');
+            if (telegramApikey) telegramApikey.value = apikey;
+            
+            const instagramApikey = document.getElementById('instagram-apikey');
+            if (instagramApikey) instagramApikey.value = apikey;
+            
+            const sfileApikey = document.getElementById('sfile-apikey');
+            if (sfileApikey) sfileApikey.value = apikey;
+            
+            const ytmp3Apikey = document.getElementById('ytmp3-apikey');
+            if (ytmp3Apikey) ytmp3Apikey.value = apikey;
+            
+            const ytmp4Apikey = document.getElementById('ytmp4-apikey');
+            if (ytmp4Apikey) ytmp4Apikey.value = apikey;
+            
+            const ytsApikey = document.getElementById('yts-apikey');
+            if (ytsApikey) ytsApikey.value = apikey;
+            
+            const spotifySearchApikey = document.getElementById('spotify-search-apikey');
+            if (spotifySearchApikey) spotifySearchApikey.value = apikey;
+            
+            const spotifyDownloadApikey = document.getElementById('spotify-download-apikey');
+            if (spotifyDownloadApikey) spotifyDownloadApikey.value = apikey;
+            
+            const tiktokSearchApikey = document.getElementById('tiktok-search-apikey');
+            if (tiktokSearchApikey) tiktokSearchApikey.value = apikey;
+            
+            const tiktokDownloadApikey = document.getElementById('tiktok-download-apikey');
+            if (tiktokDownloadApikey) tiktokDownloadApikey.value = apikey;
+            
+            const jsObfuscateApikey = document.getElementById('js-obfuscate-apikey');
+            if (jsObfuscateApikey) jsObfuscateApikey.value = apikey;
+            
+            const jsObfuscateTextApikey = document.getElementById('js-obfuscate-text-apikey');
+            if (jsObfuscateTextApikey) jsObfuscateTextApikey.value = apikey;
+            
+            const uploadApikey = document.getElementById('upload-apikey');
+            if (uploadApikey) uploadApikey.value = apikey;
+            
+            const uploadUrlApikey = document.getElementById('upload-url-apikey');
+            if (uploadUrlApikey) uploadUrlApikey.value = apikey;
+        }
+
+        async function logout() {
+            if (confirm('Yakin ingin logout?')) {
+                try {
+                    await fetch('/api/logout', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    window.location.href = '/login';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            }
+        }
+
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block').querySelector('code');
+            const textToCopy = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.style.background = '#2ecc71';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = 'rgba(255,255,255,0.1)';
+                }, 2000);
+            });
+        }
+
+        function toggleCard(cardName) {
+            const content = document.getElementById(`content-${cardName}`);
+            const header = document.getElementById(`header-${cardName}`);
+            const icon = header.querySelector('.card-title i');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(90deg)';
+            }
+        }
+
+        async function testAPI(apiName) {
+            if (!userData) {
+                alert('Silakan login terlebih dahulu!');
+                return;
+            }
+
+            if (userData.remaining <= 0) {
+                alert('Maaf, limit API Anda sudah habis! Silakan hubungi admin untuk upgrade.');
+                return;
+            }
+
+            const btn = document.getElementById(`${apiName}-btn`);
+            const loading = document.getElementById(`${apiName}-loading`);
+            const result = document.getElementById(`${apiName}-result`);
+            
+            let url = '';
+            let paramValue = '';
+            
+            if (apiName === 'instagram') {
+                paramValue = document.getElementById('instagram-url').value.trim();
+                if (!paramValue) {
+                    alert('Masukkan URL Instagram!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                url = `/api/instagram?url=${encodeURIComponent(paramValue)}&apikey=${userData.apikey}`;
+            } else if (apiName === 'sfile') {
+                paramValue = document.getElementById('sfile-url').value.trim();
+                if (!paramValue) {
+                    alert('Masukkan URL Sfile!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                url = `/api/sfile?url=${encodeURIComponent(paramValue)}&apikey=${userData.apikey}`;
+            } else if (apiName === 'ytmp3') {
+                paramValue = document.getElementById('ytmp3-url').value.trim();
+                if (!paramValue) {
+                    alert('Masukkan URL YouTube!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                url = `/api/ytmp3?url=${encodeURIComponent(paramValue)}&apikey=${userData.apikey}`;
+            } else if (apiName === 'ytmp4') {
+                const urlValue = document.getElementById('ytmp4-url').value.trim();
+                const qualityValue = document.getElementById('ytmp4-quality').value.trim() || '720';
+    
+                if (!urlValue) {
+                    alert('Masukkan URL YouTube!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+    
+                const validQualities = ['360', '480', '720', '1080'];
+                if (!validQualities.includes(qualityValue)) {
+                    alert('Kualitas tidak valid! Pilih: 360, 480, 720, atau 1080');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+    
+                url = `/api/ytmp4?url=${encodeURIComponent(urlValue)}&quality=${qualityValue}&apikey=${userData.apikey}`;
+                paramValue = urlValue;
+            } else if (apiName === 'yts') {
+                paramValue = document.getElementById('yts-query').value.trim();
+                if (!paramValue) {
+                    alert('Masukkan kata kunci pencarian!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                url = `/api/yts?query=${encodeURIComponent(paramValue)}&apikey=${userData.apikey}`;
+            } else if (apiName === 'spotify-search') {
+                const queryValue = document.getElementById('spotify-search-query').value.trim();
+                
+                if (!queryValue) {
+                    alert('Masukkan kata kunci pencarian!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                
+                url = `/api/spotify-search?query=${encodeURIComponent(queryValue)}&type=track&limit=10&apikey=${userData.apikey}`;
+                paramValue = queryValue;
+            } else if (apiName === 'spotify-download') {
+                const urlValue = document.getElementById('spotify-download-url').value.trim();
+                
+                if (!urlValue) {
+                    alert('Masukkan URL Spotify atau Track ID!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                
+                url = `/api/spotify-download?url=${encodeURIComponent(urlValue)}&apikey=${userData.apikey}`;
+                paramValue = urlValue;
+            } else if (apiName === 'tiktok-search') {
+                const queryValue = document.getElementById('tiktok-search-query').value.trim();
+                
+                if (!queryValue) {
+                    alert('Masukkan kata kunci pencarian!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                
+                url = `/api/tiktok-search?query=${encodeURIComponent(queryValue)}&apikey=${userData.apikey}`;
+                paramValue = queryValue;
+            } else if (apiName === 'tiktok-download') {
+                const urlValue = document.getElementById('tiktok-download-url').value.trim();
+                
+                if (!urlValue) {
+                    alert('Masukkan URL TikTok!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                
+                url = `/api/tiktok-download?url=${encodeURIComponent(urlValue)}&apikey=${userData.apikey}`;
+                paramValue = urlValue;
+            } else if (apiName === 'telegram') {
+                const username = document.getElementById('telegram-username').value.trim();
+                if (!username) {
+                    alert('Masukkan username Telegram!');
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                    return;
+                }
+                
+                btn.disabled = true;
+                loading.classList.add('active');
+                result.innerHTML = '<pre><code>// Mengambil data dari 3 endpoint sekaligus...</code></pre>';
+
+                try {
+                    const [stalkRes, mediaRes, infoRes] = await Promise.all([
+                        fetch(`/api/telegram?username=${encodeURIComponent(username)}&apikey=${userData.apikey}`),
+                        fetch(`/api/telegram/media?username=${encodeURIComponent(username)}&apikey=${userData.apikey}`),
+                        fetch(`/api/telegram/info?username=${encodeURIComponent(username)}&apikey=${userData.apikey}`)
+                    ]);
+
+                    const stalkData = await stalkRes.json();
+                    const mediaData = await mediaRes.json();
+                    const infoData = await infoRes.json();
+
+                    if (!stalkData.status || !mediaData.status || !infoData.status) {
+                        let errorMsg = '';
+                        if (!stalkData.status && stalkData.code === 429) errorMsg = stalkData.message;
+                        else if (!mediaData.status && mediaData.code === 429) errorMsg = mediaData.message;
+                        else if (!infoData.status && infoData.code === 429) errorMsg = infoData.message;
+                        
+                        if (errorMsg) throw new Error(errorMsg);
+                    }
+
+                    const completeData = {
+                        status: true,
+                        code: 200,
+                        author: "Yakuza Api's",
+                        username: username,
+                        data: {
+                            stalk: stalkData.status ? stalkData.data : { error: stalkData.message },
+                            media: mediaData.status ? mediaData.data : { error: mediaData.message },
+                            info: infoData.status ? infoData.data : { error: infoData.message }
+                        },
+                        user: stalkData.user || {
+                            username: userData.username,
+                            hit: userData.hit,
+                            remaining_hits: userData.remaining,
+                            limit: userData.limit
+                        },
+                        timestamp: new Date().toISOString()
+                    };
+
+                    result.innerHTML = `<pre><code>${JSON.stringify(completeData, null, 2)}</code></pre>`;
+                    
+                    await refreshUserData();
+                    
+                } catch (error) {
+                    result.innerHTML = `<pre><code>${JSON.stringify({ 
+                        error: true, 
+                        message: error.message 
+                    }, null, 2)}</code></pre>`;
+                    
+                    if (error.message.includes('Limit') || error.message.includes('habis')) {
+                        showNotification('⚠️ Limit API Anda sudah habis!', 'warning');
+                    }
+                } finally {
+                    btn.disabled = false;
+                    loading.classList.remove('active');
+                }
+                return;
+            }
+
+            if (!paramValue && apiName !== 'telegram') {
+                alert('Parameter tidak boleh kosong!');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            result.innerHTML = '<pre><code>// Mengirim request...</code></pre>';
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                result.innerHTML = `<pre><code>${JSON.stringify(data, null, 2)}</code></pre>`;
+                
+                await refreshUserData();
+                
+            } catch (error) {
+                result.innerHTML = `<pre><code>${JSON.stringify({ 
+                    error: true, 
+                    message: error.message 
+                }, null, 2)}</code></pre>`;
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        async function testTelegramStatus() {
+            const btn = document.getElementById('status-btn');
+            const loading = document.getElementById('status-loading');
+            const resultDiv = document.getElementById('status-result');
+            
+            btn.disabled = true;
+            loading.classList.add('active');
+            resultDiv.innerHTML = '<pre><code>// Mengecek status...</code></pre>';
+
+            try {
+                const response = await fetch('/api/telegram/status');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `<pre><code>${JSON.stringify(data, null, 2)}</code></pre>`;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<pre><code>${JSON.stringify({ 
+                    error: true, 
+                    message: error.message 
+                }, null, 2)}</code></pre>`;
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        async function refreshUserData() {
+            try {
+                const response = await fetch('/api/user/me', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status) {
+                    userData = data.data;
+                    updateUI();
+                }
+            } catch (error) {
+                console.error('Gagal refresh data:', error);
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'warning' ? '#e74c3c' : '#667eea'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = `<i class="fas fa-${type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function searchEndpoint() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.endpoint-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const desc = card.querySelector('.description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || desc.includes(searchTerm) || searchTerm === '') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchEndpoint();
+            }
+        });
+
+        setInterval(() => {
+            if (userData) {
+                refreshUserData();
+            }
+        }, 10000);
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
