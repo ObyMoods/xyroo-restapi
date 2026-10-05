@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakuza Api's · Profil Pengguna</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c15;
+            background-image: 
+                radial-gradient(circle at 15% 30%, rgba(90, 60, 200, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 85% 70%, rgba(180, 70, 160, 0.12) 0%, transparent 35%);
+            color: #eaeef5;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(8, 10, 18, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 0.9rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(120, 100, 220, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 8px #6a4cfa);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b3abff, #d090f0, #ffb3b3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #ccd6f0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            border-bottom-color: #a77eff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .profile-card {
+            background: rgba(18, 17, 29, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 38px;
+            border: 1px solid #3f3866;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 3px solid #b38cff;
+        }
+
+        .profile-title h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff, #dcd0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .profile-title p {
+            color: #b3c0e0;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(140, 100, 255, 0.15);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #5f4b9a;
+            font-size: 0.9rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-item {
+            background: rgba(28, 26, 43, 0.5);
+            border: 1px solid #363152;
+            border-radius: 24px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: #a0a6c5;
+            font-size: 0.9rem;
+        }
+
+        .progress-container {
+            background: #1c1a30;
+            border-radius: 30px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-percent {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #b388ff;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #2a2642;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 30px;
+            transition: width 0.3s;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #b3c0e0;
+            font-size: 0.9rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .info-item {
+            background: rgba(28, 26, 43, 0.5);
+            border: 1px solid #363152;
+            border-radius: 24px;
+            padding: 1.5rem;
+        }
+
+        .info-label {
+            color: #a0a6c5;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: white;
+            word-break: break-all;
+        }
+
+        .info-value-small {
+            font-size: 1rem;
+            color: #b3c0e0;
+        }
+
+        .apikey-container {
+            background: #131126;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #584f8a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .apikey-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .apikey-label {
+            color: #b388ff;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .apikey-value {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 1rem;
+            color: #bcaaff;
+            word-break: break-all;
+            cursor: pointer;
+        }
+
+        .btn-sm {
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            background: transparent;
+            border: 1.5px solid #7460d9;
+            color: #daceff;
+            transition: 0.2s;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-sm:hover {
+            background: #443f77;
+            border-color: #b197ff;
+        }
+
+        .btn-regenerate {
+            background: rgba(255, 80, 120, 0.1);
+            border-color: #e25a7c;
+            color: #ffb3c6;
+        }
+        
+        .btn-regenerate:hover {
+            background: #c6476b;
+            color: white;
+        }
+
+        .warning-note {
+            color: #fabc3c;
+            background: rgba(240, 180, 40, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            border: 1px solid #ca9e3a;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #6c4cfa, #9a4cfa);
+            color: white;
+            box-shadow: 0 8px 18px #4c2f9e60;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #7f6ef0;
+            color: #dbd0ff;
+        }
+
+        .btn-secondary:hover {
+            background: #2a2345;
+            border-color: #b59eff;
+        }
+
+        .btn-danger {
+            background: rgba(255, 80, 120, 0.1);
+            border: 2px solid #e25a7c;
+            color: #ffb3c6;
+        }
+
+        .btn-danger:hover {
+            background: #c6476b;
+            color: white;
+        }
+
+        .activity-section {
+            background: rgba(18, 17, 29, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 38px;
+            border: 1px solid #3f3866;
+            padding: 2rem;
+        }
+
+        .activity-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .activity-item {
+            background: rgba(28, 26, 43, 0.5);
+            border: 1px solid #363152;
+            border-radius: 24px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(140, 100, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b38cff;
+            font-size: 1.2rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-label {
+            color: #a0a6c5;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-value {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1f1d39;
+            padding: 2rem;
+            border-radius: 38px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #9075e0;
+        }
+
+        .modal-content h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #b3c0e0;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(28, 26, 43, 0.8);
+            border: 1px solid #48416b;
+            border-radius: 20px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #9075e0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .regenerate-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .regenerate-modal.active {
+            display: flex;
+        }
+
+        .regenerate-content {
+            background: #1f1d39;
+            padding: 2rem;
+            border-radius: 50px;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid #e25a7c;
+            text-align: center;
+        }
+
+        .regenerate-content h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .regenerate-content p {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .regenerate-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #5d5a7a;
+        }
+
+        hr {
+            border: 0.5px solid #2f2b4a;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .apikey-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-title">
+                    <h1 id="username">Loading...</h1>
+                    <p>
+                        <span id="role" class="badge"><i class="fas fa-tag"></i> REGULAR</span>
+                        <span class="badge"><i class="fas fa-key"></i> <span id="remaining-days">0</span> Hari Tersisa</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="panggaran-api">0</div>
+                    <div class="stat-label">Panggaran API</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="hari-tersisa">0</div>
+                    <div class="stat-label">Hari Tersisa</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="hit-used">0</div>
+                    <div class="stat-label">Penggunaan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="limit-total">100</div>
+                    <div class="stat-label">Total Limit</div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">
+                        <i class="fas fa-chart-line" style="color:#b388ff;"></i>
+                        Penggunaan Limit
+                    </span>
+                    <span class="progress-percent" id="usage-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-stats">
+                    <span><span id="hit-used-progress">0</span> digunakan</span>
+                    <span>dari <span id="limit-total-progress">100</span></span>
+                </div>
+            </div>
+
+            <div class="apikey-container">
+                <div class="apikey-wrapper">
+                    <span class="apikey-label"><i class="fas fa-key"></i> API Key:</span>
+                    <span class="apikey-value" id="apikey" onclick="copyApiKey()" title="Klik untuk copy">Loading...</span>
+                </div>
+                <button class="btn-sm btn-regenerate" onclick="showRegenerateModal()">
+                    <i class="fas fa-sync-alt"></i> Regenerate
+                </button>
+            </div>
+            <div class="warning-note">
+                <i class="fas fa-exclamation-triangle"></i> Regenerate API Key akan membuat key baru dan key lama tidak bisa digunakan lagi!
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-envelope"></i> Email
+                    </div>
+                    <div class="info-value" id="email">Loading...</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-infinity"></i> Limit
+                    </div>
+                    <div class="info-value" id="limit">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-calendar-alt"></i> Kadaluarsa
+                    </div>
+                    <div class="info-value" id="expired">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-tag"></i> Role
+                    </div>
+                    <div class="info-value" id="role-info">REGULAR</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-shield-alt"></i> Status
+                    </div>
+                    <div class="info-value" id="status">Active</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-clock"></i> Sisa Limit
+                    </div>
+                    <div class="info-value" id="remaining">0</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="#" class="btn btn-primary" onclick="showEditModal()">
+                    <i class="fas fa-edit"></i> Edit Profil
+                </a>
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-plug"></i> Cek Endpoint
+                </a>
+                <button class="btn btn-secondary" onclick="refreshData()" id="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="activity-section">
+            <h3 class="activity-title">
+                <i class="fas fa-history" style="color:#b388ff;"></i>
+                Aktivitas Terkini
+            </h3>
+            <div class="activity-list" id="activity-list">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-user-edit"></i> Edit Profil</h2>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="edit-username" placeholder="Masukkan username baru">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="edit-email" placeholder="Masukkan email baru">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeEditModal()">Batal</button>
+                <button class="btn btn-primary" onclick="saveProfile()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="regenerate-modal" id="regenerate-modal">
+        <div class="regenerate-content">
+            <h3><i class="fas fa-sync-alt"></i> Regenerate API Key?</h3>
+            <p>API Key lama akan langsung tidak bisa digunakan! Lanjutkan?</p>
+            <div class="regenerate-actions">
+                <button class="btn btn-secondary" onclick="closeRegenerateModal()">Batal</button>
+                <button class="btn btn-danger" onclick="regenerateApiKey()">Ya, Regenerate</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <hr>
+        <p style="margin-top: 2rem;">© 2026 Yakuza Api's · Developer · <i class="fas fa-dragon"></i></p>
+    </footer>
+
+    <script>
+        let userData = null;
+
+        window.onload = function() {
+            loadUserData();
+            loadActivity();
+        };
+
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user/me', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status) {
+                    userData = data.data;
+                    updateProfileUI();
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        async function loadActivity() {
+            try {
+                const response = await fetch('/api/user/activity', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status) {
+                    renderActivities(data.data);
+                }
+            } catch (error) {
+                console.error('Error loading activity:', error);
+            }
+        }
+
+        function updateProfileUI() {
+            const hit = userData.hit || 0;
+            const limit = userData.limit || 100;
+            const remaining = userData.remaining || limit;
+            const usagePercent = ((hit / limit) * 100).toFixed(1);
+            
+            document.getElementById('username').textContent = userData.username;
+            document.getElementById('email').textContent = userData.email;
+            document.getElementById('apikey').textContent = userData.apikey;
+            document.getElementById('role').innerHTML = `<i class="fas fa-tag"></i> ${userData.role || 'REGULAR'}`;
+            document.getElementById('role-info').textContent = userData.role || 'REGULAR';
+            document.getElementById('limit').textContent = remaining;
+            document.getElementById('remaining').textContent = remaining;
+            document.getElementById('limit-total').textContent = limit;
+            document.getElementById('limit-total-progress').textContent = limit;
+            document.getElementById('hit-used').textContent = hit;
+            document.getElementById('hit-used-progress').textContent = hit;
+            document.getElementById('panggaran-api').textContent = hit;
+            document.getElementById('hari-tersisa').textContent = userData.remaining_days || 0;
+            document.getElementById('remaining-days').textContent = userData.remaining_days || 0;
+            document.getElementById('usage-percent').textContent = usagePercent + '%';
+            document.getElementById('progress-fill').style.width = usagePercent + '%';
+            
+            if (userData.expired_at) {
+                document.getElementById('expired').textContent = new Date(userData.expired_at).toLocaleDateString('id-ID');
+            } else {
+                document.getElementById('expired').textContent = 'Tidak ada';
+            }
+            
+            document.getElementById('status').textContent = userData.status === 'active' ? 'Active' : 'Inactive';
+            
+            document.getElementById('edit-username').value = userData.username;
+            document.getElementById('edit-email').value = userData.email;
+        }
+
+        function renderActivities(activities) {
+            const container = document.getElementById('activity-list');
+            container.innerHTML = '';
+            
+            activities.forEach(activity => {
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                item.innerHTML = `
+                    <div class="activity-icon">
+                        <i class="fas ${activity.icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-label">${activity.label}</div>
+                        <div class="activity-value">${activity.value}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function showEditModal() {
+            document.getElementById('edit-modal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+        }
+
+        async function saveProfile() {
+            const newUsername = document.getElementById('edit-username').value.trim();
+            const newEmail = document.getElementById('edit-email').value.trim();
+            
+            if (!newUsername || !newEmail) {
+                alert('Username dan email tidak boleh kosong!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        username: newUsername,
+                        email: newEmail
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status) {
+                    alert('✅ Profil berhasil diperbarui!');
+                    userData.username = newUsername;
+                    userData.email = newEmail;
+                    updateProfileUI();
+                    closeEditModal();
+                } else {
+                    alert('❌ Gagal: ' + data.message);
+                }
+            } catch (error) {
+                alert('❌ Terjadi kesalahan: ' + error.message);
+            }
+        }
+
+        function showRegenerateModal() {
+            document.getElementById('regenerate-modal').classList.add('active');
+        }
+
+        function closeRegenerateModal() {
+            document.getElementById('regenerate-modal').classList.remove('active');
+        }
+
+        async function regenerateApiKey() {
+            closeRegenerateModal();
+            
+            try {
+                const response = await fetch('/api/user/regenerate-key', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status) {
+                    alert('✅ API Key berhasil digenerate ulang!');
+                    userData.apikey = data.data.apikey;
+                    document.getElementById('apikey').textContent = userData.apikey;
+                    await refreshData();
+                } else {
+                    alert('❌ Gagal: ' + data.message);
+                }
+            } catch (error) {
+                alert('❌ Terjadi kesalahan: ' + error.message);
+            }
+        }
+
+        async function refreshData() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            const originalText = refreshBtn.innerHTML;
+            
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            refreshBtn.disabled = true;
+            
+            try {
+                await loadUserData();
+                await loadActivity();
+                alert('✅ Data berhasil diperbarui!');
+            } catch (error) {
+                console.error('Refresh error:', error);
+                alert('❌ Gagal refresh data: ' + error.message);
+            } finally {
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            }
+        }
+
+        async function logout() {
+            if (confirm('Yakin ingin logout?')) {
+                try {
+                    await fetch('/api/logout', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    window.location.href = '/login';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            }
+        }
+
+        function copyApiKey() {
+            const key = document.getElementById('apikey').textContent;
+            navigator.clipboard.writeText(key).then(() => {
+                alert('✅ API Key copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>
