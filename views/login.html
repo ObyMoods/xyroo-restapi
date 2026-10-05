@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakuza Api's - Masuk ke Akun</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: rgba(20, 20, 31, 0.95);
+            border-radius: 40px;
+            padding: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-side {
+            color: white;
+            padding-right: 30px;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: #667eea;
+            font-size: 2.8rem;
+        }
+
+        .info-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .info-list {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .info-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+        }
+
+        .info-list li i {
+            color: #667eea;
+            font-size: 1.2rem;
+            width: 24px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .form-side {
+            color: white;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #a0a0a0;
+            font-size: 1rem;
+        }
+
+        .form-header p a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-header p a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px 15px 45px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .forgot-password a {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .message.success {
+            display: block;
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            color: #2ecc71;
+        }
+
+        .message.error {
+            display: block;
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            color: #ff6b6b;
+        }
+
+        .message i {
+            margin-right: 8px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(102,126,234,0.1);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 30px;
+                gap: 30px;
+            }
+
+            .info-side {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                padding-right: 0;
+                padding-bottom: 30px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .info-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-side">
+            <div class="logo">
+                <i class="fas fa-crown"></i> Yakuza Api's
+            </div>
+            <h2 class="info-title">Selamat Datang Kembali!</h2>
+            <ul class="info-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Akses ke semua endpoint API premium</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Pantau penggunaan API Key Anda</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Kelola limit request harian</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Dokumentasi lengkap & mudah dipahami</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Support 24/7 via WhatsApp/Telegram</span>
+                </li>
+            </ul>
+
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-users">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="total-requests">0</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Masuk ke Akun</h2>
+                <p>Belum punya akun? <a href="/register">Daftar di sini</a></p>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" placeholder="Masukkan email Anda">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Masukkan password">
+                </div>
+                <div class="forgot-password">
+                    <a href="/forgot-password">Lupa password?</a>
+                </div>
+            </div>
+
+            <button class="btn" onclick="login()" id="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Masuk
+            </button>
+
+            <div class="loading" id="login-loading">
+                <div class="spinner"></div>
+                <p>Memproses...</p>
+            </div>
+
+            <div class="message" id="login-message"></div>
+
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            loadStats();
+            checkExistingSession();
+        };
+
+        async function checkExistingSession() {
+            try {
+                const response = await fetch('/api/user/me', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.log('Not logged in');
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                if (data.status) {
+                    document.getElementById('total-users').textContent = data.data.total_users;
+                    document.getElementById('total-requests').textContent = data.data.total_requests;
+                }
+            } catch (error) {
+                console.error('Gagal load stats:', error);
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-btn');
+            const loading = document.getElementById('login-loading');
+            const message = document.getElementById('login-message');
+
+            if (!email || !password) {
+                showMessage('login', 'Email dan password harus diisi!', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            message.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (data.status) {
+                    showMessage('login', '✅ Login Success...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
+                } else {
+                    showMessage('login', data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('login', '❌ Terjadi kesalahan: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        function showMessage(form, text, type) {
+            const message = document.getElementById(form + '-message');
+            message.className = 'message ' + type;
+            message.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle') + '"></i> ' + text;
+            message.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
