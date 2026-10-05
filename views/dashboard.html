@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yakuza Api's · Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c15;
+            background-image: 
+                radial-gradient(circle at 15% 30%, rgba(90, 60, 200, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 85% 70%, rgba(180, 70, 160, 0.12) 0%, transparent 35%);
+            color: #eaeef5;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(8, 10, 18, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 0.9rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(120, 100, 220, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 8px #6a4cfa);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b3abff, #d090f0, #ffb3b3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #ccd6f0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            border-bottom-color: #a77eff;
+        }
+
+        .support-link {
+            background: rgba(140, 100, 255, 0.15);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #5f4b9a;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .overview-tag {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 25, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 0.7rem 1.8rem;
+            border-radius: 60px;
+            margin-bottom: 2.2rem;
+            border: 1px solid #2d264d;
+            width: fit-content;
+            font-weight: 500;
+            color: #c5bbff;
+        }
+
+        .hero-simple {
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-simple h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #dcd0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-simple .subhero {
+            font-size: 1.2rem;
+            color: #b3c0e0;
+            max-width: 600px;
+            margin-top: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1.2rem;
+            margin: 1.8rem 0 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.9rem 2.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #6c4cfa, #9a4cfa);
+            color: white;
+            box-shadow: 0 8px 18px #4c2f9e60;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #7f6ef0;
+            color: #dbd0ff;
+        }
+
+        .btn-secondary:hover {
+            background: #2a2345;
+            border-color: #b59eff;
+        }
+
+        .doc-badge {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.5rem;
+            color: #afb7da;
+            font-weight: 400;
+        }
+
+        .doc-badge a {
+            color: #afb7da;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .doc-badge a:hover {
+            color: white;
+        }
+
+        .doc-badge i {
+            color: #9f93ff;
+            margin-right: 5px;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin: 3rem 0 1.5rem;
+        }
+
+        .stat-block {
+            background: rgba(16, 16, 28, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid #343145;
+            border-radius: 36px;
+            padding: 1.4rem 2rem 1.4rem 2.2rem;
+            min-width: 200px;
+            flex: 1 1 auto;
+            box-shadow: 0 18px 30px -12px black;
+        }
+
+        .stat-block-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .stat-block-label {
+            color: #a0a6c5;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .flex-row-mini {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .speed-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .speed-value {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #dcdcff;
+        }
+
+        .speed-label {
+            font-size: 0.85rem;
+            color: #858bb2;
+        }
+
+        .ping-badge {
+            background: #1c1a30;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            color: #b3aeec;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: 1px solid #5d5390;
+            color: #cac3ff;
+            border-radius: 40px;
+            padding: 0.4rem 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: #2a2345;
+        }
+
+        .why-choose {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 4rem 0 2rem;
+        }
+
+        .why-left {
+            flex: 1 1 240px;
+        }
+
+        .why-left h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f0ebff, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .why-left p {
+            color: #b4bad5;
+            font-size: 1.05rem;
+            max-width: 300px;
+        }
+
+        .features-grid {
+            flex: 3 1 500px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: rgba(28, 26, 43, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid #363152;
+            border-radius: 28px;
+            padding: 2rem 1.8rem;
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: #8875dd;
+            background: #1f1d33;
+        }
+
+        .feature-icon {
+            font-size: 2.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            color: #b1bad4;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #5d5a7a;
+        }
+
+        hr {
+            border: 0.5px solid #2f2b4a;
+        }
+
+        .api-status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0 1rem;
+        }
+
+        .api-status-header h2 {
+            font-size: 2rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo-area">
+            <i class="fas fa-crown logo-icon" style="color:#b38cff;"></i>
+            <span class="logo-text">Yakuza Api's</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-simple">
+            <h1>REST API Platform</h1>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <h1 style="font-size:3.2rem;">Yakuza Api's</h1>
+                <i class="fas fa-bolt" style="color:#c67aff; font-size:2rem;"></i>
+            </div>
+            <p class="subhero">Powerful, scalable, and developer-friendly REST API platform. Build amazing applications with our comprehensive suite of APIs designed for modern development.</p>
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary"><i class="fas fa-rocket"></i> Get Started</a>
+                <a href="/pricing" class="btn btn-secondary"><i class="fas fa-tag"></i> Price List</a>
+            </div>
+            <div class="doc-badge">
+                <a href="/"><i class="fas fa-file-alt"></i> Documentation Get</a>
+            </div>
+        </div>
+
+        <div class="api-status-header">
+            <h2>API Status & Statistics</h2>
+        </div>
+        <p style="color:#b2b7d5; margin-bottom: 2rem;">Real-time information about our API service performance and availability.</p>
+
+        <div class="stats-row">
+            <div class="stat-block">
+                <div class="stat-block-title" id="total-endpoints">12</div>
+                <div class="stat-block-label">Total Endpoints <i class="fas fa-check-circle" style="color:#2ecf8b;"></i></div>
+                <div class="stat-block-label" style="font-size:0.9rem; color:#9ca3c0;"><i class="fas fa-check" style="color:#2ecf8b;"></i> Available</div>
+            </div>
+        </div>
+
+        <div class="flex-row-mini">
+            <div class="speed-item">
+                <span class="speed-value" id="api-provider">Yakuza Api's</span>
+                <span class="speed-label">API Provider <i class="fas fa-check-circle" style="color:#1ddb9a;"></i> Verified</span>
+            </div>
+        </div>
+
+        <div class="why-choose">
+            <div class="why-left">
+                <h2>Why Choose <br>Yakuza Api's?</h2>
+                <p>Built by developers, for developers. We understand what you need to build amazing applications with our powerful REST API platform.</p>
+            </div>
+            <div class="features-grid" id="features-grid">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <hr>
+        <p style="margin-top: 2rem;">© 2026 Yakuza Api's · Developer · <i class="fas fa-dragon"></i></p>
+    </footer>
+
+    <script>
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/api/dashboard/stats');
+                const data = await response.json();
+                
+                if (data.status) {
+                    document.getElementById('total-endpoints').textContent = data.data.total_endpoints || '243';
+                    document.getElementById('total-categories').textContent = data.data.total_categories || '14';
+                    document.getElementById('server-location').textContent = data.data.server?.location || 'Singapore, SG';
+                    document.getElementById('server-provider').textContent = data.data.server?.provider || '16509 Amazon.com, Inc.';
+                    document.getElementById('upload-speed').textContent = data.data.performance?.upload_speed || '51.0 Mbps';
+                    document.getElementById('ping').textContent = `~ Ping: ${data.data.performance?.ping || '73 ms'}`;
+                    document.getElementById('response-time').textContent = data.data.performance?.response_time || '2.7 sec';
+                    document.getElementById('api-provider').textContent = data.data.provider?.name || 'Yakuza Api's';
+                }
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+
+        async function loadFeatures() {
+            try {
+                const response = await fetch('/api/dashboard/features');
+                const data = await response.json();
+                
+                if (data.status && data.data) {
+                    const featuresGrid = document.getElementById('features-grid');
+                    featuresGrid.innerHTML = '';
+                    
+                    data.data.forEach(feature => {
+                        const card = document.createElement('div');
+                        card.className = 'feature-card';
+                        card.innerHTML = `
+                            <div class="feature-icon"><i class="fas fa-${feature.icon}" style="color:${feature.iconColor || '#bd93f9'};"></i></div>
+                            <div class="feature-title">${feature.title}</div>
+                            <div class="feature-desc">${feature.description}</div>
+                        `;
+                        featuresGrid.appendChild(card);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading features:', error);
+                renderStaticFeatures();
+            }
+        }
+
+        function renderStaticFeatures() {
+            const features = [
+                {
+                    icon: 'bolt',
+                    iconColor: '#f3d359',
+                    title: 'Lightning Fast',
+                    description: 'Optimized REST APIs with low latency and high throughput'
+                },
+                {
+                    icon: 'shield-alt',
+                    iconColor: '#75d5b5',
+                    title: 'Enterprise Security',
+                    description: 'Bank-level security with encryption and authentication'
+                },
+                {
+                    icon: 'code',
+                    iconColor: '#bd93f9',
+                    title: 'Developer First',
+                    description: 'RESTful APIs with comprehensive documentation'
+                }
+            ];
+
+            const featuresGrid = document.getElementById('features-grid');
+            featuresGrid.innerHTML = '';
+            
+            features.forEach(feature => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+                card.innerHTML = `
+                    <div class="feature-icon"><i class="fas fa-${feature.icon}" style="color:${feature.iconColor};"></i></div>
+                    <div class="feature-title">${feature.title}</div>
+                    <div class="feature-desc">${feature.description}</div>
+                `;
+                featuresGrid.appendChild(card);
+            });
+        }
+
+        window.onload = function() {
+            loadDashboardStats();
+            loadFeatures();
+            document.getElementById('response-date').textContent = new Date().toLocaleString('id-ID');
+        };
+    </script>
+</body>
+</html>
